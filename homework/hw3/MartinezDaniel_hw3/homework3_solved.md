@@ -6,20 +6,20 @@
 
 ## 1. OWASP & CWE Mapping
 
-Se seleccionaron tres categorías del OWASP Top 10 (edición 2021):
+Se seleccionaron tres categorías del OWASP Top 10 (edición 2021) [1]:
 
 | OWASP Category | CWE | CVE | Impacto (2 oraciones) |
 |---|---|---|---|
-| **A03 – Injection** | CWE-89: SQL Injection | CVE-2023-48788 (FortiClientEMS) | Un atacante no autenticado podía enviar peticiones SQL maliciosas al componente de sincronización de clientes, logrando ejecución remota de código con privilegios SYSTEM en el servidor. El fallo afectó a miles de organizaciones que usaban FortiClientEMS ≤ 7.2.2, con un CVSS de 9.8 (Crítico). |
-| **A02 – Cryptographic Failures** | CWE-327: Use of Broken Algorithm | CVE-2025-24054 (Windows NTLM Hash Disclosure) | Windows permitía que un archivo `.library-ms` malicioso provocara la filtración automática del hash NTLM del usuario al ser procesado por el Explorador, exponiendo credenciales en tránsito de red. El hash NTLM capturado podía ser crackeado offline o reutilizado en ataques pass-the-hash para comprometer cuentas de dominio. |
-| **A07 – Identification & Authentication Failures** | CWE-306: Missing Authentication for Critical Function | CVE-2026-41940 (cPanel & WHM) | cPanel exponía una función crítica de administración sin requerir autenticación, permitiendo a cualquier usuario de red ejecutar acciones privilegiadas con un CVSS de 9.3. El acceso no autorizado permitía modificar configuraciones del servidor web, instalar software malicioso o elevar privilegios dentro del sistema de hosting. |
+| **A03 – Injection** [2] | CWE-89: SQL Injection [5] | CVE-2026-21643 (FortiClientEMS) [8][9] | Un atacante no autenticado podía explotar el endpoint `/api/v1/init_consts` del GUI de FortiClientEMS para inyectar comandos SQL y lograr ejecución remota de código en el servidor, con un CVSS de 9.8 (Crítico). El fallo afectó entornos multi-tenant de FortiClientEMS 7.4.4 y fue añadido al catálogo KEV de CISA en abril de 2026 por explotación activa en la naturaleza. |
+| **A02 – Cryptographic Failures** [3] | CWE-327: Use of Broken Algorithm [6] | CVE-2025-24054 (Windows NTLM Hash Disclosure) [10][11] | Windows permitía que un archivo `.library-ms` malicioso provocara la filtración automática del hash NTLM del usuario al ser procesado por el Explorador, exponiendo credenciales en tránsito de red. El hash NTLM capturado podía ser crackeado offline o reutilizado en ataques pass-the-hash para comprometer cuentas de dominio. |
+| **A07 – Identification & Authentication Failures** [4] | CWE-306: Missing Authentication for Critical Function [7] | CVE-2026-41940 (cPanel & WHM) [12][13] | cPanel exponía una función crítica de administración sin requerir autenticación, permitiendo a cualquier usuario de red ejecutar acciones privilegiadas con un CVSS de 9.8. El acceso no autorizado permitía modificar configuraciones del servidor web, instalar software malicioso o elevar privilegios dentro del sistema de hosting. |
 ---
 
 ## 2. The Ecuadorian Context: LOPDP
 
 ### Los Ocho Derechos del Titular (Art. 9, LOPDP)
 
-La **Ley Orgánica de Protección de Datos Personales** (R.O. Suplemento 459, 26 de mayo de 2021) reconoce ocho derechos a los titulares de datos:
+La **Ley Orgánica de Protección de Datos Personales** (R.O. Suplemento 459, 26 de mayo de 2021) [14][15] reconoce ocho derechos a los titulares de datos:
 
 | # | Derecho | Descripción |
 |---|---|---|
@@ -40,7 +40,7 @@ La **Ley Orgánica de Protección de Datos Personales** (R.O. Suplemento 459, 26
 | **Sanciones máximas** | 0.1 % – 1 % de los ingresos anuales del responsable (*leve → muy grave*) | Hasta 20 millones de EUR o **4 %** de la facturación global anual (lo que sea mayor) |
 | **Notificación de brecha** | 5 días hábiles a la Superintendencia | 72 horas a la autoridad de control |
 | **Transferencias internacionales** | Requieren garantías adecuadas (países con nivel adecuado o cláusulas contractuales) | Sistema de decisiones de adecuación + SCCs + BCRs, gestionado por Comisión Europea |
-| **Caso de enforcement real** | LigaPro (2025): multa de USD 259 000 por tratamiento sin consentimiento válido en datos de aficionados | Meta (Irlanda, 2023): multa de 1 200 millones EUR por transferencias a EE.UU. |
+| **Caso de enforcement real** | LigaPro (2025): multa de USD 259 644 por tratamiento sin consentimiento válido en datos de aficionados [16][17][18] | Meta (Irlanda, 2023): multa de 1 200 millones EUR por transferencias a EE.UU. [19][20] |
 | **Diferencia clave** | Régimen más joven, sanciones económicas menores, pero con plazos de notificación más estrictos (5 vs. 72 h). La SPD aún está consolidando su capacidad institucional. | Marco maduro, fuertes poderes de investigación, mecanismo de ventanilla única para grupos multinacionales. |
 
 ---
@@ -50,7 +50,7 @@ La **Ley Orgánica de Protección de Datos Personales** (R.O. Suplemento 459, 26
 
 ---
 
-### Reto 1: **Cookies** (picoCTF 2021)
+### Reto 1: **Cookies** (picoCTF 2021) [21][22]
 
 **Categoría:** Web Exploitation  
 **Dificultad:** Fácil
@@ -112,7 +112,7 @@ El servidor tomaba decisiones basándose en un valor numérico enviado por el cl
 
 ---
 
-### Reto 2: **SQLi Lite** (picoCTF)
+### Reto 2: **SQLi Lite** (picoCTF) [21][23]
 
 **Categoría:** Web Exploitation  
 **Dificultad:** Media
@@ -188,7 +188,7 @@ La flag estaba "a plena vista" pero oculta en el DOM — otro detalle intenciona
 **Flag obtenida:** `picoCTF{L00k5_l1k3_y0u_solv3d_it_9b0a4e21}`
 
 #### Lección de seguridad
-La vulnerabilidad existe porque el servidor construye la consulta SQL concatenando directamente el input del usuario (CWE-89). La defensa correcta son las **Prepared Statements / Parameterized Queries**: el valor del usuario se pasa como parámetro separado y el motor SQL lo trata siempre como dato, nunca como código ejecutable.
+La vulnerabilidad existe porque el servidor construye la consulta SQL concatenando directamente el input del usuario (CWE-89) [5]. La defensa correcta son las **Prepared Statements / Parameterized Queries**: el valor del usuario se pasa como parámetro separado y el motor SQL lo trata siempre como dato, nunca como código ejecutable.
 
 ```php
 // Vulnerable
@@ -203,7 +203,7 @@ $stmt->execute([$username, $password]);
 
 ## 4. WAF Deployment (DVWA)
 
-### Paso 1: Levantar DVWA con Docker
+### Paso 1: Levantar DVWA con Docker [24]
 
 ```bash
 # Descargar y ejecutar DVWA
@@ -251,7 +251,7 @@ docker compose up -d
 Ver: [`dvwa-waf/docker-compose.yml`](dvwa-waf/docker-compose.yml)
 
 - `dvwa`: contenedor con DVWA, expuesto solo dentro de la red interna Docker
-- `waf`: contenedor ModSecurity + OWASP CRS con Nginx, expuesto al host en el puerto `8080`
+- `waf`: contenedor ModSecurity + OWASP CRS con Nginx, expuesto al host en el puerto `8080` [25][26][27]
 - El WAF actúa como reverse proxy: todo el tráfico pasa primero por ModSecurity antes de llegar a DVWA
 
 Acceder a `http://localhost:8080/setup.php` → **Create / Reset Database** → Login: `admin / password`.
@@ -314,11 +314,11 @@ curl -v "http://localhost:8080/vulnerabilities/exec/" \
 
 | Categoría de Dato | Dato Específico | Base Legal (LOPDP / GDPR) |
 |---|---|---|
-| Identificación | Nombre completo, cédula/pasaporte | Ejecución del contrato (Art. 7 LOPDP / Art. 6.1.b GDPR) |
+| Identificación | Nombre completo, cédula/pasaporte | Ejecución del contrato (Art. 7 LOPDP [14] / Art. 6.1.b GDPR [20]) |
 | Contacto | Número de teléfono celular | Ejecución del contrato |
 | Financiero | Cuenta bancaria vinculada, historial de transacciones | Ejecución del contrato + Obligación legal (SRI, UAFE) |
-| Comportamiento | Patrones de gasto (análisis de IA) | **Consentimiento explícito** (Art. 7 LOPDP / Art. 6.1.a GDPR) |
-| Técnico | Dirección IP, tipo de dispositivo | Interés legítimo (seguridad antifraude, Art. 6.1.f GDPR) |
+| Comportamiento | Patrones de gasto (análisis de IA) | **Consentimiento explícito** (Art. 7 LOPDP [14] / Art. 6.1.a GDPR [20]) [30] |
+| Técnico | Dirección IP, tipo de dispositivo | Interés legítimo (seguridad antifraude, Art. 6.1.f GDPR [20]) |
 
 ---
 
@@ -333,7 +333,7 @@ curl -v "http://localhost:8080/vulnerabilities/exec/" \
 
 ### 4. Decisiones Automatizadas (Cláusula IA)
 
-QuitoCash utiliza sistemas de inteligencia artificial para **predecir hábitos de gasto** y generar recomendaciones financieras personalizadas. En cumplimiento del **Art. 23 GDPR** y el **Art. 27 LOPDP (Derecho a no ser objeto de decisiones automatizadas)**:
+QuitoCash utiliza sistemas de inteligencia artificial para **predecir hábitos de gasto** y generar recomendaciones financieras personalizadas. En cumplimiento del **Art. 22 GDPR** [29] y el **Art. 27 LOPDP (Derecho a no ser objeto de decisiones automatizadas)** [14]:
 
 - Este tratamiento **requiere su consentimiento explícito** y puede ser revocado en cualquier momento desde la app.
 - Usted tiene derecho a **solicitar intervención humana**, expresar su punto de vista e **impugnar la decisión**.
@@ -344,7 +344,7 @@ QuitoCash utiliza sistemas de inteligencia artificial para **predecir hábitos d
 
 ### 5. Transferencias Internacionales de Datos
 
-Sus datos se almacenan en servidores ubicados en **AWS São Paulo (Brasil)** y pueden transferirse a proveedores de servicios en países con nivel de protección adecuado o bajo **Cláusulas Contractuales Tipo (SCCs)** de la Comisión Europea, cumpliendo el **Art. 54 LOPDP** y el **Capítulo V GDPR**.
+Sus datos se almacenan en servidores ubicados en **AWS São Paulo (Brasil)** y pueden transferirse a proveedores de servicios en países con nivel de protección adecuado o bajo **Cláusulas Contractuales Tipo (SCCs)** de la Comisión Europea, cumpliendo el **Art. 54 LOPDP** [28] y el **Capítulo V GDPR** [20].
 
 ---
 
@@ -389,6 +389,92 @@ Aplicamos cifrado AES-256 en reposo, TLS 1.3 en tránsito, autenticación multif
 
 | Dato que podría "querer" recopilar | Por qué NO debe recopilarse (Principio de Minimización) |
 |---|---|
-| **Geolocalización en tiempo real y continua** | La app solo necesita el país de residencia para compliance regulatorio. El rastreo GPS continuo excede la finalidad declarada y viola el principio de minimización (Art. 8 LOPDP / Art. 5.1.c GDPR). El fraude puede detectarse con la IP sin precisión de GPS. |
+| **Geolocalización en tiempo real y continua** | La app solo necesita el país de residencia para compliance regulatorio. El rastreo GPS continuo excede la finalidad declarada y viola el principio de minimización (Art. 8 LOPDP [14] / Art. 5.1.c GDPR [20]). El fraude puede detectarse con la IP sin precisión de GPS. |
 | **Lista de contactos del teléfono** | Aunque permite "enviar dinero a tus contactos", los contactos son datos de **terceros** que no han dado su consentimiento. Basta con que el usuario ingrese manualmente el número destinatario. Recopilar toda la agenda es desproporcionado y afecta derechos de terceros. |
-| **Biometría facial para cada transacción** | El reconocimiento facial (dato biométrico sensible, Art. 19 LOPDP / Art. 9 GDPR) para cada pago es excesivo. El PIN o la huella dactilar local (procesada en el dispositivo, nunca enviada al servidor) son suficientes y menos intrusivos bajo el principio de privacy by design. |
+| **Biometría facial para cada transacción** | El reconocimiento facial (dato biométrico sensible, Art. 19 LOPDP [14] / Art. 9 GDPR [20]) para cada pago es excesivo. El PIN o la huella dactilar local (procesada en el dispositivo, nunca enviada al servidor) son suficientes y menos intrusivos bajo el principio de privacy by design. |
+
+---
+
+## Referencias
+
+### Sección 1 — OWASP & CWE Mapping
+
+**Estándares y catálogos de vulnerabilidades**
+
+[1] OWASP Foundation. (2021). *OWASP Top 10:2021*. https://owasp.org/Top10/2021/
+
+[2] OWASP Foundation. (2021). *A03:2021 – Injection*. https://owasp.org/Top10/2021/A03_2021-Injection/
+
+[3] OWASP Foundation. (2021). *A02:2021 – Cryptographic Failures*. https://owasp.org/Top10/2021/A02_2021-Cryptographic_Failures/
+
+[4] OWASP Foundation. (2021). *A07:2021 – Identification and Authentication Failures*. https://owasp.org/Top10/2021/A07_2021-Identification_and_Authentication_Failures/
+
+[5] MITRE Corporation. (2024). *CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')*. https://cwe.mitre.org/data/definitions/89.html
+
+[6] MITRE Corporation. (2024). *CWE-327: Use of a Broken or Risky Cryptographic Algorithm*. https://cwe.mitre.org/data/definitions/327.html
+
+[7] MITRE Corporation. (2024). *CWE-306: Missing Authentication for Critical Function*. https://cwe.mitre.org/data/definitions/306.html
+
+**CVEs referenciados**
+
+[8] NIST National Vulnerability Database. (2026). *CVE-2026-21643 Detail*. https://nvd.nist.gov/vuln/detail/CVE-2026-21643
+
+[9] Arctic Wolf. (2026). *CVE-2026-21643: Critical SQL Injection in FortiClientEMS*. https://arcticwolf.com/resources/blog/cve-2026-21643/
+
+[10] NIST National Vulnerability Database. (2025). *CVE-2025-24054 Detail*. https://nvd.nist.gov/vuln/detail/CVE-2025-24054
+
+[11] Check Point Research. (2025). *CVE-2025-24054, NTLM Exploit in the Wild*. https://research.checkpoint.com/2025/cve-2025-24054-ntlm-exploit-in-the-wild/
+
+[12] NIST National Vulnerability Database. (2026). *CVE-2026-41940 Detail*. https://nvd.nist.gov/vuln/detail/CVE-2026-41940
+
+[13] Rapid7. (2026). *CVE-2026-41940: cPanel & WHM Authentication Bypass*. https://www.rapid7.com/blog/post/etr-cve-2026-41940-cpanel-whm-authentication-bypass/
+
+---
+
+### Sección 2 — Contexto Ecuatoriano: LOPDP
+
+[14] Asamblea Nacional del Ecuador. (2021). *Ley Orgánica de Protección de Datos Personales* (Registro Oficial Suplemento 459, 26 de mayo de 2021). https://www.gob.ec/regulaciones/ley-organica-proteccion-datos-personales
+
+[15] Asamblea Nacional del Ecuador. (2021). *Texto completo LOPDP* [PDF]. https://www.finanzaspopulares.gob.ec/wp-content/uploads/2021/07/ley_organica_de_proteccion_de_datos_personales.pdf
+
+[16] Superintendencia de Protección de Datos Personales (SPDP). (2025). *Prensa — primeras sanciones por infracciones graves a la LOPDP*. https://spdp.gob.ec/prensa/
+
+[17] Red Iberoamericana de Protección de Datos (REDIPD). (2025). *SPDP emite sus primeras sanciones por infracciones graves a la Ley de Protección de Datos Personales*. https://www.redipd.org/noticias/spdp-emite-sus-primeras-sanciones-por-infracciones-graves-LOPDP
+
+[18] Lawema Abogados. (2025). *Multa a LigaPro por Protección de Datos en Ecuador*. https://lawemabogados.com/multa-ligapro-proteccion-datos-ecuador/
+
+[19] European Data Protection Board (EDPB). (2023). *1.2 billion euro fine for Facebook as a result of EDPB binding decision*. https://www.edpb.europa.eu/news/news/2023/12-billion-euro-fine-facebook-result-edpb-binding-decision_en
+
+[20] Parlamento Europeo y Consejo de la UE. (2016). *Reglamento (UE) 2016/679 — Reglamento General de Protección de Datos (RGPD/GDPR)*. https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX%3A32016R0679
+
+---
+
+### Sección 3 — Retos picoCTF
+
+[21] Carnegie Mellon University. (s.f.). *picoCTF — Plataforma de competencia CTF*. https://picoctf.org/
+
+[22] Tom's IT Cafe. (2024). *PicoCTF: Cookies [CTF Write Up]*. https://tomsitcafe.com/2024/03/08/picoctf-cookies-ctf-write-up/
+
+[23] CTFtime.org. (2022). *picoCTF 2022 / SQlilite / Writeup*. https://ctftime.org/writeup/32834
+
+---
+
+### Sección 4 — WAF Deployment (DVWA)
+
+[24] digininja. (s.f.). *Damn Vulnerable Web Application (DVWA)* [Repositorio GitHub]. https://github.com/digininja/DVWA
+
+[25] OWASP Foundation. (s.f.). *OWASP ModSecurity Core Rule Set (CRS)*. https://owasp.org/www-project-modsecurity-core-rule-set/
+
+[26] OWASP / Core Rule Set Project. (s.f.). *owasp/modsecurity-crs* [Docker Hub]. https://hub.docker.com/r/owasp/modsecurity-crs/
+
+[27] Core Rule Set Project. (s.f.). *coreruleset/modsecurity-crs-docker — Official ModSecurity Docker + CRS images* [GitHub]. https://github.com/coreruleset/modsecurity-crs-docker
+
+---
+
+### Sección 5 — Privacy Notice: QuitoCash
+
+[28] Presidencia de la República del Ecuador. (2023). *Reglamento General a la Ley Orgánica de Protección de Datos Personales* [PDF]. https://www.cosede.gob.ec/wp-content/uploads/2023/12/REGLAMENTO-GENERAL-A-LA-LEY-ORG%C3%81NICA-DE-PROTECCION-DE-DATOS-PERSONALES_compressed-1.pdf
+
+[29] European Data Protection Board (EDPB). (2018). *Guidelines on Automated individual decision-making and Profiling for the purposes of Regulation 2016/679* (WP251rev.01). https://www.edpb.europa.eu/our-work-tools/our-documents/guidelines/guidelines-automated-individual-decision-making-and-profiling_en
+
+[30] European Data Protection Board. (2022). *Guidelines 05/2020 on consent under Regulation 2016/679*. https://www.edpb.europa.eu/our-work-tools/our-documents/guidelines/guidelines-052020-consent-under-regulation-2016679_en
